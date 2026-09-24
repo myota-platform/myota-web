@@ -13,6 +13,7 @@ This repository is a runnable vertical-slice bootstrap for the service repositor
 - Activation and QSO primitives with idempotency keys and audit events.
 - Universal themed frontend with verified/candidate map distinction.
 - Interactive Sevilla sample map using visible OpenStreetMap attribution, drag panning, and zoom controls.
+- Published programme awards with hunter/activator levels, server-side progress checks, participant sign-in, and award-level requests.
 - OpenAPI and event contracts, ADRs, migration notes, health endpoints and local deployment manifests.
 
 The default test/runtime adapter is in-memory so the slice can be exercised without third-party Python packages. PostgreSQL/PostGIS is the production storage target and is defined in `db/migrations/`.
