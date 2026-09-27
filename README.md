@@ -1,22 +1,27 @@
-# MyOTA Outdoor Activation Platform
+# MyOTA participant web
 
 MyOTA is a programme-agnostic platform for outdoor activation programmes. MPOTA is represented as a configured programme, not as the platform itself. No rules or charter text are copied from POTA or any other programme: every programme supplies its own configuration, policy, eligibility, awards and public charter.
 
-This repository is a runnable vertical-slice bootstrap for the service repositories described in [`docs/repository-map.md`](docs/repository-map.md). It contains four independently runnable Python services, an API-first contract, a universal browser UI, PostGIS migrations, and Kubernetes/Helm deployment assets.
+This repository owns the public, participant-facing browser experience. It is
+separate from myota-admin-web: administration, moderation, imports, programme
+editing, and role management stay in the web control plane.
 
 ## What works now
 
-- Amateur-radio-aware identity: operator/SWL participation, multiple callsigns, one primary callsign, lifecycle and verification fields.
-- Shared entity-category catalogue and programme assignments; programme owners define rules, minimum QSOs, awards, themes and optional OIDC settings.
-- Geodata lifecycle: imported candidate → community proposal → approver review → approved entity.
-- Provenance-aware imports with adapter metadata for ParkServe, OSM, government GIS and manual proposals.
-- Activation and QSO primitives with idempotency keys and audit events.
-- Universal themed frontend with verified/candidate map distinction.
+- Programme switching and programme-provided theme/content.
+- Approved/candidate map distinction with interactive Sevilla sample data.
+- Entity and programme browsing foundations.
+- Participant sign-in, published award progress, and hunter/activator level requests.
 - Interactive Sevilla sample map using visible OpenStreetMap attribution, drag panning, and zoom controls.
 - Published programme awards with hunter/activator levels, server-side progress checks, participant sign-in, and award-level requests.
 - OpenAPI and event contracts, ADRs, migration notes, health endpoints and local deployment manifests.
 
-The default test/runtime adapter is in-memory so the slice can be exercised without third-party Python packages. PostgreSQL/PostGIS is the production storage target and is defined in `db/migrations/`.
+The current public experience is not yet the complete launch product. The next
+participant milestones are the Explorer landing page, nearby search, entity
+details, proposals, activation/QSO workflows, public activation history,
+privacy-aware leaderboards, and production account/profile flows. They are
+tracked in the [charter gap analysis](https://github.com/myota-platform/myota-docs/blob/main/docs/charter-gap-analysis.md)
+and the [organization roadmap](https://github.com/myota-platform/.github/tree/main/profile).
 
 ## Run the vertical slice
 
@@ -25,13 +30,19 @@ python3 -m unittest discover -s tests -v
 python3 services/dev_server.py
 ```
 
-Open <http://127.0.0.1:8080>. The dev server starts the four services on ports 8001–8004 and proxies the browser API calls. It is intentionally dependency-free.
+Open <http://127.0.0.1:8080>. The local harness is dependency-light; for
+durable data use the Compose stack in myota-deploy with Colima.
 
-For a containerized PostGIS environment, use `docker compose up --build` after starting Colima. The image uses the same service code with `SERVICE=identity|programmes|geodata|activity`.
+The web client renders policy supplied by each programme. It does not copy
+POTA/MPOTA rules or decide eligibility in the browser. MPOTA is sample data
+only. Android and iOS roadmap work has the same participant-only scope; admin
+workflows remain web-only.
 
 ## Architecture
 
-Read [`docs/architecture.md`](docs/architecture.md), [`docs/adr/0001-storage-topology.md`](docs/adr/0001-storage-topology.md), and [`docs/repository-map.md`](docs/repository-map.md). The current bootstrap is kept together to make the vertical slice easy to run; the repository map defines the justified GitHub split once the MyOTA organization is available.
+Read the [project charter](https://github.com/myota-platform/myota-docs/blob/main/docs/project-charter.md)
+and [repository map](https://github.com/myota-platform/myota-docs/blob/main/docs/repository-map.md)
+for product motivation and ownership boundaries.
 
 ## Source project
 
