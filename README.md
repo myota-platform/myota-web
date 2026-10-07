@@ -9,10 +9,11 @@ editing, and role management stay in the web control plane.
 ## What works now
 
 - Programme switching and programme-provided theme/content.
-- Approved/candidate map distinction with interactive Sevilla sample data.
+- Approved/candidate map distinction using entities returned by the geodata API.
 - Entity and programme browsing foundations.
 - Participant sign-in, published award progress, and hunter/activator level requests.
-- Interactive Sevilla sample map using visible OpenStreetMap attribution, drag panning, and zoom controls.
+- Interactive map with visible OpenStreetMap attribution, drag panning and zoom
+  controls; no built-in geodata seed entities are replayed at startup.
 - Published programme awards with hunter/activator levels, server-side progress checks, participant sign-in, and award-level requests.
 - OpenAPI and event contracts, ADRs, migration notes, health endpoints and local deployment manifests.
 
@@ -23,15 +24,14 @@ privacy-aware leaderboards, and production account/profile flows. They are
 tracked in the [charter gap analysis](https://github.com/myota-platform/myota-docs/blob/main/docs/charter-gap-analysis.md)
 and the [organization roadmap](https://github.com/myota-platform/.github/tree/main/profile).
 
-## Run the vertical slice
+## Run locally
 
-```bash
-python3 -m unittest discover -s tests -v
-python3 services/dev_server.py
-```
-
-Open <http://127.0.0.1:8080>. The local harness is dependency-light; for
-durable data use the Compose stack in myota-deploy with Colima.
+This repository contains the static participant client in `web/`, not a
+Python service or dev-server entry point. Start Colima and run the Compose
+stack from [myota-deploy](https://github.com/myota-platform/myota-deploy#run-the-vertical-slice).
+Open <http://127.0.0.1:8080> for the participant UI/gateway; administration is
+the separate Vue application on port 8090. Both clients access service APIs
+and never connect directly to databases or NATS.
 
 The web client renders policy supplied by each programme. It does not copy
 POTA/MPOTA rules or decide eligibility in the browser. MPOTA is sample data
@@ -46,4 +46,5 @@ for product motivation and ownership boundaries.
 
 ## Source project
 
-The original `ea7klk/mpota` repository remains untouched. Its charter and planned flows are treated as the migration source; see [`docs/migration-from-mpota.md`](docs/migration-from-mpota.md).
+The original `ea7klk/mpota` repository remains untouched; see the
+[migration strategy](https://github.com/myota-platform/myota-docs/blob/main/docs/migration-from-mpota.md).
