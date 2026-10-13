@@ -38,6 +38,16 @@ POTA/MPOTA rules or decide eligibility in the browser. MPOTA is sample data
 only. Android and iOS roadmap work has the same participant-only scope; admin
 workflows remain web-only.
 
+## Container image artifact
+
+The workflow assembles the static client into an unprivileged NGINX image and
+publishes `ghcr.io/myota-platform/myota-web:testing` after checks pass on the
+`testing` branch. It also publishes the immutable `testing-<commit-sha>` tag;
+main builds publish `latest`, while feature and pull-request builds do not
+publish. The image only serves the files in `web/`; it is not deployed by this
+repository. Any future runtime deployment must provide the API routing and
+same-origin configuration owned by `myota-deploy`.
+
 ## Architecture
 
 Read the [project charter](https://github.com/myota-platform/myota-docs/blob/main/docs/project-charter.md)
