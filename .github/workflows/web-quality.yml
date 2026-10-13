@@ -1,0 +1,45 @@
+name: Web quality
+
+on:
+  push:
+    branches: [main, testing, 'feature/**', 'fix/**']
+  pull_request:
+    branches: [main, testing]
+
+permissions:
+  contents: read
+
+jobs:
+  static-check:
+    name: Static checks and tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check JavaScript syntax
+        run: node --check web/app.js
+      - name: Test static site structure
+        run: python -m unittest discover -s tests -v
+
+  build-artifact:
+    name: Build static site artifact
+    needs: [static-check]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble static site
+        run: |
+          mkdir -p dist
+          cp -R web/. dist/
+      - name: Upload immutable CI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: myota-web-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
